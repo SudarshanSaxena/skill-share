@@ -1,0 +1,140 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String        @id @default(uuid())
+  userType          UserType
+  providerType      ProviderType?
+  firstName         String?
+  lastName          String?
+  email             String        @unique
+  mobile            String?
+  passwordHash      String
+  streetNumber      String?
+  streetName        String?
+  city              String?
+  state             String?
+  postalCode        String?
+  companyName       String?
+  phoneNumber       String?
+  businessTaxNumber String?       @db.Char(10)
+  createdAt         DateTime      @default(now())
+
+  // Relations
+  skills              Skill[]
+  tasks               Task[]         @relation("UserTasks")
+  offers              Offer[]
+  taskProgressUpdates TaskProgress[] @relation("UserTaskProgress")
+}
+
+model Skill {
+  id           String       @id @default(uuid())
+  provider     User         @relation(fields: [providerId], references: [id])
+  providerId   String
+  category     String
+  experience   String
+  natureOfWork NatureOfWork
+  hourlyRate   Float
+  createdAt    DateTime     @default(now())
+}
+
+model Task {
+  id                   String     @id @default(uuid())
+  user                 User       @relation("UserTasks", fields: [userId], references: [id])
+  userId               String
+  category             String
+  name                 String
+  description          String
+  expectedStartDate    DateTime?
+  expectedWorkingHours Int?
+  hourlyRate           Float
+  currency             Currency
+  status               TaskStatus @default(open)
+  createdAt            DateTime   @default(now())
+
+  // Relations
+  offers          Offer[]
+  progressUpdates TaskProgress[]
+  taskCompletion  TaskCompletion?
+}
+
+model Offer {
+  id         String      @id @default(uuid())
+  task       Task        @relation(fields: [taskId], references: [id])
+  taskId     String
+  provider   User        @relation(fields: [providerId], references: [id])
+  providerId String
+  price      Float       // add this
+  message    String?     // optional message
+  status     OfferStatus @default(pending)
+  createdAt  DateTime    @default(now())
+}
+
+
+model TaskProgress {
+  id          String   @id @default(uuid())
+  task        Task     @relation(fields: [taskId], references: [id])
+  taskId      String
+  provider    User     @relation("UserTaskProgress", fields: [providerId], references: [id])
+  providerId  String
+  description String
+  timestamp   DateTime @default(now())
+}
+
+model TaskCompletion {
+  id               String   @id @default(uuid())
+  task             Task     @relation(fields: [taskId], references: [id])
+  taskId           String   @unique
+  markedByProvider Boolean
+  acceptedByUser   Boolean?
+  markedAt         DateTime @default(now())
+}
+
+enum UserType {
+  user
+  provider
+}
+
+enum ProviderType {
+  individual
+  company
+}
+
+enum NatureOfWork {
+  online
+  onsite
+}
+
+enum TaskStatus {
+  open
+  offered
+  in_progress
+  completed
+  rejected
+}
+
+enum Currency {
+  USD
+  AUD
+  SGD
+  INR
+}
+
+enum OfferStatus {
+  pending
+  accepted
+  rejected
+}
