@@ -9,16 +9,21 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.0.0",
+    "@prisma/adapter-neon": "^6.8.2",
     "@prisma/client": "^6.8.2",
     "@types/cookie": "^0.6.0",
+    "@types/ws": "^8.18.1",
     "bcryptjs": "^3.0.2",
+    "bufferutil": "^4.0.9",
     "cookie": "^1.0.2",
     "jsonwebtoken": "^9.0.2",
     "next": "15.3.2",
     "prisma": "^6.8.2",
     "react": "^19.0.0",
     "react-datepicker": "^8.3.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "ws": "^8.18.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
