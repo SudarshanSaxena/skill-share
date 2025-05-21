@@ -26,6 +26,7 @@ interface Offer {
 }
 
 export default function TaskList() {
+  const [loading, setLoading] = useState(false)
   const [tasks, setTasks] = useState<Task[]>([])
   const [editingTask, setEditingTask] = useState<Task | null>(null)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
@@ -38,15 +39,18 @@ export default function TaskList() {
   const [submittingOffer, setSubmittingOffer] = useState(false)
 
   const fetchTasks = async () => {
+    setLoading(true)
     const res = await fetch('/api/tasks', {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
       },
     })
     if (res.ok) {
+      setLoading(false)
       const data = await res.json()
       setTasks(data)
     } else {
+      setLoading(false)
       alert('Failed to fetch tasks')
     }
   }
@@ -59,6 +63,7 @@ export default function TaskList() {
       },
     })
     if (res.ok) {
+      setLoadingOffers(false)
       const data = await res.json()
       setOffers(data)
     } else {
@@ -75,6 +80,7 @@ export default function TaskList() {
     }
 
     setSubmittingOffer(true)
+    setLoadingOffers(true)
     const res = await fetch('/api/offers', {
       method: 'POST',
       headers: {
@@ -89,11 +95,13 @@ export default function TaskList() {
     })
 
     if (res.ok) {
+      setLoading(false)
       alert('Offer submitted!')
       setOfferPrice('')
       setOfferMessage('')
       fetchOffers(selectedTask!.id)
     } else {
+      setLoading(false)
       const error = await res.json()
       alert(error.message || 'Failed to submit offer')
     }
@@ -115,6 +123,7 @@ export default function TaskList() {
 
   const actionOffer = async (offer: Offer, action: 'accept' | 'reject') => {
     const url = `/api/offers/${offer.id}/${action}`;
+    setLoading(true)
     const res = await fetch(url, {
       method: 'PUT',
       headers: {
@@ -122,18 +131,25 @@ export default function TaskList() {
       },
     });
     if (res.ok) {
+      setLoading
       alert(`Offer ${action}ed!`);
       if (selectedTask?.id) {
         fetchOffers(selectedTask.id);
       }
     } else {
+      setLoading(false)
       const error = await res.json();
       alert(error.message || `Failed to ${action} offer`);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <>
+    {loading && <div className="text-center">Loading...</div>}
+      {loading && <div className="text-center">Welcome to the platform!</div>}
+      {loading && <div className="text-center">Please be patient</div>}
+
+    {!loading && <div className="max-w-4xl mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Task List</h1>
 
       {!editingTask && !selectedTask && (
@@ -310,6 +326,7 @@ export default function TaskList() {
           )}
         </>
       )}
-    </div>
+    </div>}
+    </>
   )
 }
