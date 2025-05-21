@@ -4,7 +4,14 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const prisma = new PrismaClient()
 
-export async function PUT(req: NextRequest, { params }: { params: { offerId: string } }) {
+type Context = {
+  params: { offerId: string }
+}
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { offerId: string } }
+) {
   try {
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
     if (!token) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
