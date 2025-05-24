@@ -6,33 +6,63 @@ const prisma = new PrismaClient()
 
 export async function POST(req: NextRequest) {
   try {
+    console.log('[OFFER_CREATE] Incoming request:', req)
+
     const token = req.headers.get('authorization')?.replace('Bearer ', '')
-    if (!token) return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    console.log('[OFFER_CREATE] Authorization token:', token)
+    if (!token) {
+      const unauthorizedResponse = NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+      console.log('[OFFER_CREATE] Unauthorized response:', unauthorizedResponse)
+      return unauthorizedResponse
+    }
 
     const user = await getUserFromRequest(req)
-    console.log('User from request:', user)
+    console.log('[OFFER_CREATE] User from request:', user)
     if (!user || user.role !== 'provider') {
-      return NextResponse.json({ message: 'Only providers can make offers' }, { status: 403 })
+      const forbiddenResponse = NextResponse.json({ message: 'Only providers can make offers' }, { status: 403 })
+      console.log('[OFFER_CREATE] Forbidden response:', forbiddenResponse)
+      return forbiddenResponse
     }
 
     const { taskId, price, message } = await req.json()
+    console.log('[OFFER_CREATE] Parsed body:', { taskId, price, message })
 
-    if (!taskId) return NextResponse.json({ message: 'Task ID is required' }, { status: 400 })
+    if (!taskId) {
+      const missingTaskIdResponse = NextResponse.json({ message: 'Task ID is required' }, { status: 400 })
+      console.log('[OFFER_CREATE] Missing Task ID response:', missingTaskIdResponse)
+      return missingTaskIdResponse
+    }
 
     if (price === undefined || isNaN(price)) {
-      return NextResponse.json({ message: 'Price is required and must be a number' }, { status: 400 })
+      const invalidPriceResponse = NextResponse.json({ message: 'Price is required and must be a number' }, { status: 400 })
+      console.log('[OFFER_CREATE] Invalid Price response:', invalidPriceResponse)
+      return invalidPriceResponse
     }
 
     // Check if task exists and is open
     const task = await prisma.task.findUnique({ where: { id: taskId } })
-    if (!task) return NextResponse.json({ message: 'Task not found' }, { status: 404 })
-    if (task.status !== 'open') return NextResponse.json({ message: 'Task is not open for offers' }, { status: 400 })
+    console.log('[OFFER_CREATE] Task from DB:', task)
+    if (!task) {
+      const taskNotFoundResponse = NextResponse.json({ message: 'Task not found' }, { status: 404 })
+      console.log('[OFFER_CREATE] Task Not Found response:', taskNotFoundResponse)
+      return taskNotFoundResponse
+    }
+    if (task.status !== 'open') {
+      const taskNotOpenResponse = NextResponse.json({ message: 'Task is not open for offers' }, { status: 400 })
+      console.log('[OFFER_CREATE] Task Not Open response:', taskNotOpenResponse)
+      return taskNotOpenResponse
+    }
 
     // Check if provider already made an offer for this task
     const existingOffer = await prisma.offer.findFirst({
       where: { taskId, providerId: user.id }
     })
-    if (existingOffer) return NextResponse.json({ message: 'You already made an offer for this task' }, { status: 400 })
+    console.log('[OFFER_CREATE] Existing offer:', existingOffer)
+    if (existingOffer) {
+      const alreadyOfferedResponse = NextResponse.json({ message: 'You already made an offer for this task' }, { status: 400 })
+      console.log('[OFFER_CREATE] Already Offered response:', alreadyOfferedResponse)
+      return alreadyOfferedResponse
+    }
 
     // Create the offer
     const offer = await prisma.offer.create({
@@ -44,19 +74,16 @@ export async function POST(req: NextRequest) {
         status: 'pending',
       }
     })
+    console.log('[OFFER_CREATE] Created offer:', offer)
 
-    // Optionally, update task status to 'offered' if first offer
-    // if (task.status === 'open') {
-    //   await prisma.task.update({
-    //     where: { id: taskId },
-    //     data: { status: 'offered' }
-    //   })
-    // }
-
-    return NextResponse.json({ offer }, { status: 201 })
+    const offerCreatedResponse = NextResponse.json({ offer }, { status: 201 })
+    console.log('[OFFER_CREATE] Offer Created response:', offerCreatedResponse)
+    return offerCreatedResponse
 
   } catch (error) {
-    console.error('Error creating offer:', error)
-    return NextResponse.json({ message: 'Internal server error' }, { status: 500 })
+    console.error('[OFFER_CREATE] Error creating offer:', error)
+    const errorResponse = NextResponse.json({ message: 'Internal server error' }, { status: 500 })
+    console.log('[OFFER_CREATE] Error response:', errorResponse)
+    return errorResponse
   }
 }
