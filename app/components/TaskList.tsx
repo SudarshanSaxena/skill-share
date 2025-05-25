@@ -61,6 +61,7 @@ export default function TaskList() {
     const res = await fetch(`/api/tasks/offers/${taskId}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        'x-api-call-stack-id': crypto.randomUUID(), // Use Web Crypto API for trace ID
       },
     })
     if (res.ok) {
@@ -87,6 +88,7 @@ export default function TaskList() {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        'x-api-call-stack-id': crypto.randomUUID(), // Use Web Crypto API for trace ID
       },
       body: JSON.stringify({
         taskId: selectedTask?.id,
@@ -129,6 +131,7 @@ export default function TaskList() {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        'x-api-call-stack-id': crypto.randomUUID(), // Use Web Crypto API for trace ID
       },
     });
     if (res.ok) {

@@ -74,6 +74,7 @@ export default function SkillsPage() {
                       method: 'DELETE',
                       headers: {
                         Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+                        'x-api-call-stack-id': crypto.randomUUID(), // Use Web Crypto API for trace ID
                       },
                     })
                     if (res.ok) {
