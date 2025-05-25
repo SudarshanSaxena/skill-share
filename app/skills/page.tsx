@@ -21,6 +21,7 @@ export default function SkillsPage() {
       const res = await fetch('/api/skills', {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+          'x-api-call-stack-id': crypto.randomUUID(), // Use Web Crypto API for trace ID
         },
       })
 

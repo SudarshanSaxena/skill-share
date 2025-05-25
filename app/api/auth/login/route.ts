@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
 import { comparePassword, generateToken } from '@/lib/auth'
-import { PrismaClient } from '@/app/generated/prisma'
 import { serialize } from 'cookie'
 import { logger } from '@/lib/logger'
 import { z } from 'zod' // <-- Add this import
+import { prisma } from '@/lib/prisma'
 
-const prisma = new PrismaClient()
 
 // Define Zod schema for login payload
 const loginSchema = z.object({
@@ -16,7 +15,7 @@ const loginSchema = z.object({
 export async function POST(req: Request) {
   try {
     logger(req, '[LOGIN]-Request:', req)
-    
+
     const body = await req.json()
     logger(req, '[LOGIN]-Parsed body:', body)
 

@@ -43,7 +43,7 @@ export default function AuthForm({ type }: AuthFormProps) {
 
     const headers: any = {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'x-api-call-stack-id': crypto.randomUUID() }, // Use Web Crypto API for trace ID
       body: JSON.stringify({ ...formData, userType, providerType }),
     }
 

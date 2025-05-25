@@ -66,6 +66,7 @@ export default function TaskForm({ type, taskId, initialData, onSuccess }: TaskF
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token') || ''}`,
+        'x-api-call-stack-id': crypto.randomUUID(), // Use Web Crypto API for trace ID
       },
       body: JSON.stringify({
         category: formData.category,

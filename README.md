@@ -230,6 +230,6 @@ MIT License. Feel free to modify and use.
 
 Secure Storage on frontend
 Connection Pooling Implementation And Understanding
-Req Validation
-Error Handling
-Proper Logging of Messages
+Req Validation - done
+Error Handling - done
+Proper Logging of Messages - done

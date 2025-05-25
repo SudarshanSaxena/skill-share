@@ -21,7 +21,7 @@ export default async function SkillEditPage({ params }: SkillEditPageProps) {
   // Convert hourlyRate from Decimal (if Prisma uses Decimal) to number if needed
   const skillData = {
     category: skill.category,
-    experience: skill.experience,
+    experience: String(skill.experience),
     natureOfWork: skill.natureOfWork,
     hourlyRate: Number(skill.hourlyRate),
   }

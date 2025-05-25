@@ -35,6 +35,7 @@ export default function OffersList({ taskId }: OffersListProps) {
         const res = await fetch(`/api/offers/task/${taskId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
+            'x-api-call-stack-id': crypto.randomUUID(), // Use Web Crypto API for trace ID
           },
         })
         if (!res.ok) {
