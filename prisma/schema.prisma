@@ -46,7 +46,7 @@ model Skill {
   provider     User         @relation(fields: [providerId], references: [id])
   providerId   String
   category     String
-  experience   String
+  experience   Int
   natureOfWork NatureOfWork
   hourlyRate   Float
   createdAt    DateTime     @default(now())
@@ -62,7 +62,7 @@ model Task {
   expectedStartDate    DateTime?
   expectedWorkingHours Int?
   hourlyRate           Float
-  currency             Currency
+  currency             String
   status               TaskStatus @default(open)
   createdAt            DateTime   @default(now())
 
@@ -126,12 +126,7 @@ enum TaskStatus {
   rejected
 }
 
-enum Currency {
-  USD
-  AUD
-  SGD
-  INR
-}
+
 
 enum OfferStatus {
   pending

@@ -83,16 +83,6 @@ export const TaskStatus: {
 export type TaskStatus = (typeof TaskStatus)[keyof typeof TaskStatus]
 
 
-export const Currency: {
-  USD: 'USD',
-  AUD: 'AUD',
-  SGD: 'SGD',
-  INR: 'INR'
-};
-
-export type Currency = (typeof Currency)[keyof typeof Currency]
-
-
 export const OfferStatus: {
   pending: 'pending',
   accepted: 'accepted',
@@ -118,10 +108,6 @@ export const NatureOfWork: typeof $Enums.NatureOfWork
 export type TaskStatus = $Enums.TaskStatus
 
 export const TaskStatus: typeof $Enums.TaskStatus
-
-export type Currency = $Enums.Currency
-
-export const Currency: typeof $Enums.Currency
 
 export type OfferStatus = $Enums.OfferStatus
 
@@ -2831,10 +2817,12 @@ export namespace Prisma {
   }
 
   export type SkillAvgAggregateOutputType = {
+    experience: number | null
     hourlyRate: number | null
   }
 
   export type SkillSumAggregateOutputType = {
+    experience: number | null
     hourlyRate: number | null
   }
 
@@ -2842,7 +2830,7 @@ export namespace Prisma {
     id: string | null
     providerId: string | null
     category: string | null
-    experience: string | null
+    experience: number | null
     natureOfWork: $Enums.NatureOfWork | null
     hourlyRate: number | null
     createdAt: Date | null
@@ -2852,7 +2840,7 @@ export namespace Prisma {
     id: string | null
     providerId: string | null
     category: string | null
-    experience: string | null
+    experience: number | null
     natureOfWork: $Enums.NatureOfWork | null
     hourlyRate: number | null
     createdAt: Date | null
@@ -2871,10 +2859,12 @@ export namespace Prisma {
 
 
   export type SkillAvgAggregateInputType = {
+    experience?: true
     hourlyRate?: true
   }
 
   export type SkillSumAggregateInputType = {
+    experience?: true
     hourlyRate?: true
   }
 
@@ -2999,7 +2989,7 @@ export namespace Prisma {
     id: string
     providerId: string
     category: string
-    experience: string
+    experience: number
     natureOfWork: $Enums.NatureOfWork
     hourlyRate: number
     createdAt: Date
@@ -3087,7 +3077,7 @@ export namespace Prisma {
       id: string
       providerId: string
       category: string
-      experience: string
+      experience: number
       natureOfWork: $Enums.NatureOfWork
       hourlyRate: number
       createdAt: Date
@@ -3518,7 +3508,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Skill", 'String'>
     readonly providerId: FieldRef<"Skill", 'String'>
     readonly category: FieldRef<"Skill", 'String'>
-    readonly experience: FieldRef<"Skill", 'String'>
+    readonly experience: FieldRef<"Skill", 'Int'>
     readonly natureOfWork: FieldRef<"Skill", 'NatureOfWork'>
     readonly hourlyRate: FieldRef<"Skill", 'Float'>
     readonly createdAt: FieldRef<"Skill", 'DateTime'>
@@ -3967,7 +3957,7 @@ export namespace Prisma {
     expectedStartDate: Date | null
     expectedWorkingHours: number | null
     hourlyRate: number | null
-    currency: $Enums.Currency | null
+    currency: string | null
     status: $Enums.TaskStatus | null
     createdAt: Date | null
   }
@@ -3981,7 +3971,7 @@ export namespace Prisma {
     expectedStartDate: Date | null
     expectedWorkingHours: number | null
     hourlyRate: number | null
-    currency: $Enums.Currency | null
+    currency: string | null
     status: $Enums.TaskStatus | null
     createdAt: Date | null
   }
@@ -4150,7 +4140,7 @@ export namespace Prisma {
     expectedStartDate: Date | null
     expectedWorkingHours: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status: $Enums.TaskStatus
     createdAt: Date
     _count: TaskCountAggregateOutputType | null
@@ -4269,7 +4259,7 @@ export namespace Prisma {
       expectedStartDate: Date | null
       expectedWorkingHours: number | null
       hourlyRate: number
-      currency: $Enums.Currency
+      currency: string
       status: $Enums.TaskStatus
       createdAt: Date
     }, ExtArgs["result"]["task"]>
@@ -4707,7 +4697,7 @@ export namespace Prisma {
     readonly expectedStartDate: FieldRef<"Task", 'DateTime'>
     readonly expectedWorkingHours: FieldRef<"Task", 'Int'>
     readonly hourlyRate: FieldRef<"Task", 'Float'>
-    readonly currency: FieldRef<"Task", 'Currency'>
+    readonly currency: FieldRef<"Task", 'String'>
     readonly status: FieldRef<"Task", 'TaskStatus'>
     readonly createdAt: FieldRef<"Task", 'DateTime'>
   }
@@ -8629,6 +8619,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Int'
+   */
+  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+  /**
+   * Reference to a field of type 'Int[]'
+   */
+  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+  /**
    * Reference to a field of type 'NatureOfWork'
    */
   export type EnumNatureOfWorkFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NatureOfWork'>
@@ -8653,34 +8657,6 @@ export namespace Prisma {
    * Reference to a field of type 'Float[]'
    */
   export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int'
-   */
-  export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
-    
-
-
-  /**
-   * Reference to a field of type 'Int[]'
-   */
-  export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Currency'
-   */
-  export type EnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Currency'>
-    
-
-
-  /**
-   * Reference to a field of type 'Currency[]'
-   */
-  export type ListEnumCurrencyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Currency[]'>
     
 
 
@@ -8853,7 +8829,7 @@ export namespace Prisma {
     id?: StringFilter<"Skill"> | string
     providerId?: StringFilter<"Skill"> | string
     category?: StringFilter<"Skill"> | string
-    experience?: StringFilter<"Skill"> | string
+    experience?: IntFilter<"Skill"> | number
     natureOfWork?: EnumNatureOfWorkFilter<"Skill"> | $Enums.NatureOfWork
     hourlyRate?: FloatFilter<"Skill"> | number
     createdAt?: DateTimeFilter<"Skill"> | Date | string
@@ -8878,7 +8854,7 @@ export namespace Prisma {
     NOT?: SkillWhereInput | SkillWhereInput[]
     providerId?: StringFilter<"Skill"> | string
     category?: StringFilter<"Skill"> | string
-    experience?: StringFilter<"Skill"> | string
+    experience?: IntFilter<"Skill"> | number
     natureOfWork?: EnumNatureOfWorkFilter<"Skill"> | $Enums.NatureOfWork
     hourlyRate?: FloatFilter<"Skill"> | number
     createdAt?: DateTimeFilter<"Skill"> | Date | string
@@ -8907,7 +8883,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Skill"> | string
     providerId?: StringWithAggregatesFilter<"Skill"> | string
     category?: StringWithAggregatesFilter<"Skill"> | string
-    experience?: StringWithAggregatesFilter<"Skill"> | string
+    experience?: IntWithAggregatesFilter<"Skill"> | number
     natureOfWork?: EnumNatureOfWorkWithAggregatesFilter<"Skill"> | $Enums.NatureOfWork
     hourlyRate?: FloatWithAggregatesFilter<"Skill"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Skill"> | Date | string
@@ -8925,7 +8901,7 @@ export namespace Prisma {
     expectedStartDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     expectedWorkingHours?: IntNullableFilter<"Task"> | number | null
     hourlyRate?: FloatFilter<"Task"> | number
-    currency?: EnumCurrencyFilter<"Task"> | $Enums.Currency
+    currency?: StringFilter<"Task"> | string
     status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
     createdAt?: DateTimeFilter<"Task"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -8964,7 +8940,7 @@ export namespace Prisma {
     expectedStartDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     expectedWorkingHours?: IntNullableFilter<"Task"> | number | null
     hourlyRate?: FloatFilter<"Task"> | number
-    currency?: EnumCurrencyFilter<"Task"> | $Enums.Currency
+    currency?: StringFilter<"Task"> | string
     status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
     createdAt?: DateTimeFilter<"Task"> | Date | string
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
@@ -9004,7 +8980,7 @@ export namespace Prisma {
     expectedStartDate?: DateTimeNullableWithAggregatesFilter<"Task"> | Date | string | null
     expectedWorkingHours?: IntNullableWithAggregatesFilter<"Task"> | number | null
     hourlyRate?: FloatWithAggregatesFilter<"Task"> | number
-    currency?: EnumCurrencyWithAggregatesFilter<"Task"> | $Enums.Currency
+    currency?: StringWithAggregatesFilter<"Task"> | string
     status?: EnumTaskStatusWithAggregatesFilter<"Task"> | $Enums.TaskStatus
     createdAt?: DateTimeWithAggregatesFilter<"Task"> | Date | string
   }
@@ -9351,7 +9327,7 @@ export namespace Prisma {
   export type SkillCreateInput = {
     id?: string
     category: string
-    experience: string
+    experience: number
     natureOfWork: $Enums.NatureOfWork
     hourlyRate: number
     createdAt?: Date | string
@@ -9362,7 +9338,7 @@ export namespace Prisma {
     id?: string
     providerId: string
     category: string
-    experience: string
+    experience: number
     natureOfWork: $Enums.NatureOfWork
     hourlyRate: number
     createdAt?: Date | string
@@ -9371,7 +9347,7 @@ export namespace Prisma {
   export type SkillUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    experience?: StringFieldUpdateOperationsInput | string
+    experience?: IntFieldUpdateOperationsInput | number
     natureOfWork?: EnumNatureOfWorkFieldUpdateOperationsInput | $Enums.NatureOfWork
     hourlyRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9382,7 +9358,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    experience?: StringFieldUpdateOperationsInput | string
+    experience?: IntFieldUpdateOperationsInput | number
     natureOfWork?: EnumNatureOfWorkFieldUpdateOperationsInput | $Enums.NatureOfWork
     hourlyRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9392,7 +9368,7 @@ export namespace Prisma {
     id?: string
     providerId: string
     category: string
-    experience: string
+    experience: number
     natureOfWork: $Enums.NatureOfWork
     hourlyRate: number
     createdAt?: Date | string
@@ -9401,7 +9377,7 @@ export namespace Prisma {
   export type SkillUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    experience?: StringFieldUpdateOperationsInput | string
+    experience?: IntFieldUpdateOperationsInput | number
     natureOfWork?: EnumNatureOfWorkFieldUpdateOperationsInput | $Enums.NatureOfWork
     hourlyRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9411,7 +9387,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     providerId?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    experience?: StringFieldUpdateOperationsInput | string
+    experience?: IntFieldUpdateOperationsInput | number
     natureOfWork?: EnumNatureOfWorkFieldUpdateOperationsInput | $Enums.NatureOfWork
     hourlyRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -9425,7 +9401,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutTasksInput
@@ -9443,7 +9419,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
     offers?: OfferUncheckedCreateNestedManyWithoutTaskInput
@@ -9459,7 +9435,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTasksNestedInput
@@ -9477,7 +9453,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     offers?: OfferUncheckedUpdateManyWithoutTaskNestedInput
@@ -9494,7 +9470,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
   }
@@ -9507,7 +9483,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9521,7 +9497,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -9933,6 +9909,17 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+
   export type EnumNatureOfWorkFilter<$PrismaModel = never> = {
     equals?: $Enums.NatureOfWork | EnumNatureOfWorkFieldRefInput<$PrismaModel>
     in?: $Enums.NatureOfWork[] | ListEnumNatureOfWorkFieldRefInput<$PrismaModel>
@@ -9967,6 +9954,7 @@ export namespace Prisma {
   }
 
   export type SkillAvgOrderByAggregateInput = {
+    experience?: SortOrder
     hourlyRate?: SortOrder
   }
 
@@ -9991,7 +9979,24 @@ export namespace Prisma {
   }
 
   export type SkillSumOrderByAggregateInput = {
+    experience?: SortOrder
     hourlyRate?: SortOrder
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
   }
 
   export type EnumNatureOfWorkWithAggregatesFilter<$PrismaModel = never> = {
@@ -10040,13 +10045,6 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type EnumCurrencyFilter<$PrismaModel = never> = {
-    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>
-    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
-    not?: NestedEnumCurrencyFilter<$PrismaModel> | $Enums.Currency
   }
 
   export type EnumTaskStatusFilter<$PrismaModel = never> = {
@@ -10141,16 +10139,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type EnumCurrencyWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>
-    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
-    not?: NestedEnumCurrencyWithAggregatesFilter<$PrismaModel> | $Enums.Currency
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumCurrencyFilter<$PrismaModel>
-    _max?: NestedEnumCurrencyFilter<$PrismaModel>
   }
 
   export type EnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -10491,6 +10479,14 @@ export namespace Prisma {
     connect?: UserWhereUniqueInput
   }
 
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
   export type EnumNatureOfWorkFieldUpdateOperationsInput = {
     set?: $Enums.NatureOfWork
   }
@@ -10567,10 +10563,6 @@ export namespace Prisma {
     decrement?: number
     multiply?: number
     divide?: number
-  }
-
-  export type EnumCurrencyFieldUpdateOperationsInput = {
-    set?: $Enums.Currency
   }
 
   export type EnumTaskStatusFieldUpdateOperationsInput = {
@@ -10904,6 +10896,22 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
   export type NestedEnumNatureOfWorkWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.NatureOfWork | EnumNatureOfWorkFieldRefInput<$PrismaModel>
     in?: $Enums.NatureOfWork[] | ListEnumNatureOfWorkFieldRefInput<$PrismaModel>
@@ -10939,13 +10947,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedEnumCurrencyFilter<$PrismaModel = never> = {
-    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>
-    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
-    not?: NestedEnumCurrencyFilter<$PrismaModel> | $Enums.Currency
   }
 
   export type NestedEnumTaskStatusFilter<$PrismaModel = never> = {
@@ -10994,16 +10995,6 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedEnumCurrencyWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Currency | EnumCurrencyFieldRefInput<$PrismaModel>
-    in?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Currency[] | ListEnumCurrencyFieldRefInput<$PrismaModel>
-    not?: NestedEnumCurrencyWithAggregatesFilter<$PrismaModel> | $Enums.Currency
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumCurrencyFilter<$PrismaModel>
-    _max?: NestedEnumCurrencyFilter<$PrismaModel>
   }
 
   export type NestedEnumTaskStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -11062,7 +11053,7 @@ export namespace Prisma {
   export type SkillCreateWithoutProviderInput = {
     id?: string
     category: string
-    experience: string
+    experience: number
     natureOfWork: $Enums.NatureOfWork
     hourlyRate: number
     createdAt?: Date | string
@@ -11071,7 +11062,7 @@ export namespace Prisma {
   export type SkillUncheckedCreateWithoutProviderInput = {
     id?: string
     category: string
-    experience: string
+    experience: number
     natureOfWork: $Enums.NatureOfWork
     hourlyRate: number
     createdAt?: Date | string
@@ -11095,7 +11086,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
     offers?: OfferCreateNestedManyWithoutTaskInput
@@ -11111,7 +11102,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
     offers?: OfferUncheckedCreateNestedManyWithoutTaskInput
@@ -11204,7 +11195,7 @@ export namespace Prisma {
     id?: StringFilter<"Skill"> | string
     providerId?: StringFilter<"Skill"> | string
     category?: StringFilter<"Skill"> | string
-    experience?: StringFilter<"Skill"> | string
+    experience?: IntFilter<"Skill"> | number
     natureOfWork?: EnumNatureOfWorkFilter<"Skill"> | $Enums.NatureOfWork
     hourlyRate?: FloatFilter<"Skill"> | number
     createdAt?: DateTimeFilter<"Skill"> | Date | string
@@ -11238,7 +11229,7 @@ export namespace Prisma {
     expectedStartDate?: DateTimeNullableFilter<"Task"> | Date | string | null
     expectedWorkingHours?: IntNullableFilter<"Task"> | number | null
     hourlyRate?: FloatFilter<"Task"> | number
-    currency?: EnumCurrencyFilter<"Task"> | $Enums.Currency
+    currency?: StringFilter<"Task"> | string
     status?: EnumTaskStatusFilter<"Task"> | $Enums.TaskStatus
     createdAt?: DateTimeFilter<"Task"> | Date | string
   }
@@ -11651,7 +11642,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutTasksInput
@@ -11668,7 +11659,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
     progressUpdates?: TaskProgressUncheckedCreateNestedManyWithoutTaskInput
@@ -11750,7 +11741,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTasksNestedInput
@@ -11767,7 +11758,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     progressUpdates?: TaskProgressUncheckedUpdateManyWithoutTaskNestedInput
@@ -11839,7 +11830,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutTasksInput
@@ -11856,7 +11847,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
     offers?: OfferUncheckedCreateNestedManyWithoutTaskInput
@@ -11938,7 +11929,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTasksNestedInput
@@ -11955,7 +11946,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     offers?: OfferUncheckedUpdateManyWithoutTaskNestedInput
@@ -12027,7 +12018,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
     user: UserCreateNestedOneWithoutTasksInput
@@ -12044,7 +12035,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
     offers?: OfferUncheckedCreateNestedManyWithoutTaskInput
@@ -12075,7 +12066,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutTasksNestedInput
@@ -12092,7 +12083,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     offers?: OfferUncheckedUpdateManyWithoutTaskNestedInput
@@ -12102,7 +12093,7 @@ export namespace Prisma {
   export type SkillCreateManyProviderInput = {
     id?: string
     category: string
-    experience: string
+    experience: number
     natureOfWork: $Enums.NatureOfWork
     hourlyRate: number
     createdAt?: Date | string
@@ -12116,7 +12107,7 @@ export namespace Prisma {
     expectedStartDate?: Date | string | null
     expectedWorkingHours?: number | null
     hourlyRate: number
-    currency: $Enums.Currency
+    currency: string
     status?: $Enums.TaskStatus
     createdAt?: Date | string
   }
@@ -12140,7 +12131,7 @@ export namespace Prisma {
   export type SkillUpdateWithoutProviderInput = {
     id?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    experience?: StringFieldUpdateOperationsInput | string
+    experience?: IntFieldUpdateOperationsInput | number
     natureOfWork?: EnumNatureOfWorkFieldUpdateOperationsInput | $Enums.NatureOfWork
     hourlyRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12149,7 +12140,7 @@ export namespace Prisma {
   export type SkillUncheckedUpdateWithoutProviderInput = {
     id?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    experience?: StringFieldUpdateOperationsInput | string
+    experience?: IntFieldUpdateOperationsInput | number
     natureOfWork?: EnumNatureOfWorkFieldUpdateOperationsInput | $Enums.NatureOfWork
     hourlyRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12158,7 +12149,7 @@ export namespace Prisma {
   export type SkillUncheckedUpdateManyWithoutProviderInput = {
     id?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
-    experience?: StringFieldUpdateOperationsInput | string
+    experience?: IntFieldUpdateOperationsInput | number
     natureOfWork?: EnumNatureOfWorkFieldUpdateOperationsInput | $Enums.NatureOfWork
     hourlyRate?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -12172,7 +12163,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     offers?: OfferUpdateManyWithoutTaskNestedInput
@@ -12188,7 +12179,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     offers?: OfferUncheckedUpdateManyWithoutTaskNestedInput
@@ -12204,7 +12195,7 @@ export namespace Prisma {
     expectedStartDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expectedWorkingHours?: NullableIntFieldUpdateOperationsInput | number | null
     hourlyRate?: FloatFieldUpdateOperationsInput | number
-    currency?: EnumCurrencyFieldUpdateOperationsInput | $Enums.Currency
+    currency?: StringFieldUpdateOperationsInput | string
     status?: EnumTaskStatusFieldUpdateOperationsInput | $Enums.TaskStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

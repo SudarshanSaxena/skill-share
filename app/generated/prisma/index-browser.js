@@ -219,13 +219,6 @@ exports.NatureOfWork = exports.$Enums.NatureOfWork = {
   onsite: 'onsite'
 };
 
-exports.Currency = exports.$Enums.Currency = {
-  USD: 'USD',
-  AUD: 'AUD',
-  SGD: 'SGD',
-  INR: 'INR'
-};
-
 exports.TaskStatus = exports.$Enums.TaskStatus = {
   open: 'open',
   offered: 'offered',

@@ -4,8 +4,17 @@ import { NextResponse } from 'next/server'
 import { getUserFromRequest } from '@/lib/auth'
 import { PrismaClient } from '@/app/generated/prisma'
 import { logger } from '@/lib/logger'
+import { z } from 'zod' // <-- Add this import
 
 const prisma = new PrismaClient()
+
+// Define Zod schema for skill update payload
+const skillUpdateSchema = z.object({
+  category: z.string().min(1, 'Category is required'),
+  experience: z.number().min(0, 'Experience must be a non-negative number'),
+  natureOfWork: z.enum(['online', 'onsite'], { required_error: 'Nature of work is required' }),
+  hourlyRate: z.number().min(0, 'Hourly rate must be a non-negative number'),
+})
 
 export async function PUT(req: Request, { params }: { params: { id: string } }) {
   logger(req, '[SKILL_UPDATE] Incoming request:', req)
@@ -35,7 +44,19 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 
     const body = await req.json()
     logger(req, '[SKILL_UPDATE] Parsed body:', body)
-    const { category, experience, natureOfWork, hourlyRate } = body
+
+    // Validate request body using Zod
+    const result = skillUpdateSchema.safeParse(body)
+    if (!result.success) {
+      const validationErrorResponse = NextResponse.json(
+        { message: 'Validation Error', errors: result.error.flatten().fieldErrors },
+        { status: 400 }
+      )
+      logger(req, '[SKILL_UPDATE] Validation error response:', validationErrorResponse)
+      return validationErrorResponse
+    }
+
+    const { category, experience, natureOfWork, hourlyRate } = result.data
     logger(req, '[SKILL_UPDATE] Variables:', { category, experience, natureOfWork, hourlyRate })
 
     const updatedSkill = await prisma.skill.update({

@@ -2,8 +2,20 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getUserFromRequest } from '../../../lib/auth'
 import { PrismaClient } from '@/app/generated/prisma'
 import { logger } from '@/lib/logger'
+import { z } from 'zod' // <-- Add this import
 
 const prisma = new PrismaClient()
+
+// Define Zod schema for task creation payload
+const taskCreateSchema = z.object({
+  category: z.string().min(1, 'Category is required'),
+  name: z.string().min(1, 'Name is required'),
+  description: z.string().min(1, 'Description is required'),
+  expectedStartDate: z.string().optional().nullable(),
+  expectedWorkingHours: z.number().int().optional().nullable(),
+  hourlyRate: z.preprocess((val) => typeof val === 'string' ? parseFloat(val) : val, z.number({ invalid_type_error: 'Hourly rate must be a number' })),
+  currency: z.string().min(1, 'Currency is required'),
+})
 
 export async function GET(req: NextRequest) {
   logger(req, '[TASK_GET] Incoming request:', req)
@@ -47,14 +59,20 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
     logger(req, '[TASK_CREATE] Parsed body:', body)
-    const { category, name, description, expectedStartDate, expectedWorkingHours, hourlyRate, currency } = body
-    logger(req, '[TASK_CREATE] Variables:', { category, name, description, expectedStartDate, expectedWorkingHours, hourlyRate, currency })
 
-    if (!category || !name || !description || !hourlyRate || !currency) {
-      const missingFieldsResponse = NextResponse.json({ message: 'Missing required fields' }, { status: 400 })
-      logger(req, '[TASK_CREATE] Missing fields response:', missingFieldsResponse)
-      return missingFieldsResponse
+    // Validate request body using Zod
+    const result = taskCreateSchema.safeParse(body)
+    if (!result.success) {
+      const validationErrorResponse = NextResponse.json(
+        { message: 'Validation Error', errors: result.error.flatten().fieldErrors },
+        { status: 400 }
+      )
+      logger(req, '[TASK_CREATE] Validation error response:', validationErrorResponse)
+      return validationErrorResponse
     }
+
+    const { category, name, description, expectedStartDate, expectedWorkingHours, hourlyRate, currency } = result.data
+    logger(req, '[TASK_CREATE] Variables:', { category, name, description, expectedStartDate, expectedWorkingHours, hourlyRate, currency })
 
     const task = await prisma.task.create({
       data: {
@@ -64,7 +82,7 @@ export async function POST(req: NextRequest) {
         description,
         expectedStartDate: expectedStartDate ? new Date(expectedStartDate) : null,
         expectedWorkingHours,
-        hourlyRate: parseFloat(hourlyRate),
+        hourlyRate,
         currency,
         status: 'open',
       },

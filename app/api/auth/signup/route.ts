@@ -2,8 +2,28 @@ import { NextResponse } from 'next/server'
 import { hashPassword } from '@/lib/auth'
 import { PrismaClient } from '@/app/generated/prisma'
 import { logger } from '@/lib/logger'
+import { z } from 'zod' // <-- Add this import
 
 const prisma = new PrismaClient()
+
+// Define Zod schema for signup payload
+const signupSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6, 'Password must be at least 6 characters'),
+  userType: z.enum(['user', 'provider']),
+  providerType: z.string().optional().nullable(),
+  firstName: z.string().min(1, 'First name is required'),
+  lastName: z.string().min(1, 'Last name is required'),
+  companyName: z.string().optional().nullable(),
+  phoneNumber: z.string().optional().nullable(),
+  businessTaxNumber: z.string().optional().nullable(),
+  mobile: z.string().optional().nullable(),
+  streetNumber: z.string().optional().nullable(),
+  streetName: z.string().optional().nullable(),
+  city: z.string().optional().nullable(),
+  state: z.string().optional().nullable(),
+  postalCode: z.string().optional().nullable(),
+})
 
 export async function POST(req: Request) {
   try {
@@ -11,6 +31,17 @@ export async function POST(req: Request) {
 
     const body = await req.json()
     logger(req, '[SIGNUP] Parsed body:', body)
+
+    // Validate request body using Zod
+    const result = signupSchema.safeParse(body)
+    if (!result.success) {
+      const validationErrorResponse = NextResponse.json(
+        { message: 'Validation Error', errors: result.error.flatten().fieldErrors },
+        { status: 400 }
+      )
+      logger(req, '[SIGNUP] Validation error response:', validationErrorResponse)
+      return validationErrorResponse
+    }
 
     const {
       email,
@@ -28,7 +59,7 @@ export async function POST(req: Request) {
       city,
       state,
       postalCode,
-    } = body
+    } = result.data
 
     logger(req, '[SIGNUP] Variables:', {
       email,
@@ -64,7 +95,7 @@ export async function POST(req: Request) {
         email,
         passwordHash,
         userType,
-        providerType: userType === 'provider' ? providerType : null,
+        providerType: userType === 'provider' ? (providerType as any as import('@/app/generated/prisma').ProviderType) : null,
         firstName,
         lastName,
         companyName: userType === 'provider' && providerType === 'company' ? companyName : null,

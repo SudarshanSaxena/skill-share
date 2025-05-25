@@ -3,8 +3,15 @@ import { comparePassword, generateToken } from '@/lib/auth'
 import { PrismaClient } from '@/app/generated/prisma'
 import { serialize } from 'cookie'
 import { logger } from '@/lib/logger'
+import { z } from 'zod' // <-- Add this import
 
 const prisma = new PrismaClient()
+
+// Define Zod schema for login payload
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(1, 'Password is required'),
+})
 
 export async function POST(req: Request) {
   try {
@@ -12,7 +19,18 @@ export async function POST(req: Request) {
     
     const body = await req.json()
     logger(req, '[LOGIN]-Parsed body:', body)
-    const { email, password } = body
+
+    // Validate request body using Zod
+    const result = loginSchema.safeParse(body)
+    if (!result.success) {
+      const validationErrorResponse = NextResponse.json(
+        { message: 'Validation Error', errors: result.error.flatten().fieldErrors },
+        { status: 400 }
+      )
+      logger(req, '[LOGIN]-Validation error response:', validationErrorResponse)
+      return validationErrorResponse
+    }
+    const { email, password } = result.data
     logger(req, '[LOGIN]-Variables:', { email, password })
 
     const user = await prisma.user.findUnique({ where: { email } })

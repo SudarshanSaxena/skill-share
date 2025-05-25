@@ -2,8 +2,16 @@ import { PrismaClient } from '@/app/generated/prisma'
 import { getUserFromRequest } from '@/lib/auth'
 import { NextRequest, NextResponse } from 'next/server'
 import { logger } from '@/lib/logger'
+import { z } from 'zod' // <-- Add this import
 
 const prisma = new PrismaClient()
+
+// Define Zod schema for offer creation payload
+const offerSchema = z.object({
+  taskId: z.string().min(1, 'Task ID is required'),
+  price: z.preprocess((val) => typeof val === 'string' ? parseFloat(val) : val, z.number({ invalid_type_error: 'Price must be a number' })),
+  message: z.string().optional(),
+})
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,20 +33,21 @@ export async function POST(req: NextRequest) {
       return forbiddenResponse
     }
 
-    const { taskId, price, message } = await req.json()
-    logger(req, '[OFFER_CREATE] Parsed body:', { taskId, price, message })
+    const body = await req.json()
+    logger(req, '[OFFER_CREATE] Parsed body:', body)
 
-    if (!taskId) {
-      const missingTaskIdResponse = NextResponse.json({ message: 'Task ID is required' }, { status: 400 })
-      logger(req, '[OFFER_CREATE] Missing Task ID response:', missingTaskIdResponse)
-      return missingTaskIdResponse
+    // Validate request body using Zod
+    const result = offerSchema.safeParse(body)
+    if (!result.success) {
+      const validationErrorResponse = NextResponse.json(
+        { message: 'Validation Error', errors: result.error.flatten().fieldErrors },
+        { status: 400 }
+      )
+      logger(req, '[OFFER_CREATE] Validation error response:', validationErrorResponse)
+      return validationErrorResponse
     }
 
-    if (price === undefined || isNaN(price)) {
-      const invalidPriceResponse = NextResponse.json({ message: 'Price is required and must be a number' }, { status: 400 })
-      logger(req, '[OFFER_CREATE] Invalid Price response:', invalidPriceResponse)
-      return invalidPriceResponse
-    }
+    const { taskId, price, message } = result.data
 
     // Check if task exists and is open
     const task = await prisma.task.findUnique({ where: { id: taskId } })
@@ -70,7 +79,7 @@ export async function POST(req: NextRequest) {
       data: {
         taskId,
         providerId: user.id,
-        price: parseFloat(price),
+        price,
         message,
         status: 'pending',
       }
