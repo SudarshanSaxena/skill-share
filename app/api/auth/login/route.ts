@@ -2,58 +2,59 @@ import { NextResponse } from 'next/server'
 import { comparePassword, generateToken } from '@/lib/auth'
 import { PrismaClient } from '@/app/generated/prisma'
 import { serialize } from 'cookie'
+import { logger } from '@/lib/logger'
 
 const prisma = new PrismaClient()
 
 export async function POST(req: Request) {
   try {
-    console.log('Incoming request:', req)
-
+    logger(req, '[LOGIN]-Request:', req)
+    
     const body = await req.json()
-    console.log('Parsed body:', body)
-
+    logger(req, '[LOGIN]-Parsed body:', body)
     const { email, password } = body
-    console.log('Email:', email)
-    console.log('Password:', password)
+    logger(req, '[LOGIN]-Variables:', { email, password })
 
     const user = await prisma.user.findUnique({ where: { email } })
-    console.log('User from DB:', user)
-
+    logger(req, '[LOGIN]-User from DB:', user)
     if (!user) {
-      const res = NextResponse.json({ message: 'Invalid credentials' }, { status: 401 })
-      console.log('Response:', res)
-      return res
+      const invalidUserResponse = NextResponse.json({ message: 'Invalid credentials' }, { status: 401 })
+      logger(req, '[LOGIN]-Invalid user response:', invalidUserResponse)
+      return invalidUserResponse
     }
 
     const valid = await comparePassword(password, user.passwordHash)
-    console.log('Password valid:', valid)
-
+    logger(req, '[LOGIN]-Password valid:', valid)
     if (!valid) {
-      const res = NextResponse.json({ message: 'Invalid credentials' }, { status: 401 })
-      console.log('Response:', res)
-      return res
+      const invalidPasswordResponse = NextResponse.json({ message: 'Invalid credentials' }, { status: 401 })
+      logger(req, '[LOGIN]-Invalid password response:', invalidPasswordResponse)
+      return invalidPasswordResponse
     }
 
     const token = generateToken(user)
-    console.log('Generated token:', token)
-
-    // Create cookie with JWT token
+    logger(req, '[LOGIN]-Generated token:', token)
     const cookie = serialize('token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 24 * 7,
       path: '/',
       sameSite: 'lax',
     })
-    console.log('Serialized cookie:', cookie)
+    logger(req, '[LOGIN]-Serialized cookie:', cookie)
 
-    const response = NextResponse.json({ message: 'Login successful' }, { status: 200 })
-    response.headers.set('Set-Cookie', cookie)
-    console.log('Final response:', response)
-
-    return response
-  } catch (err) {
-    console.error('Error in POST /api/auth/login:', err)
-    return NextResponse.json({ message: 'Internal Server Error', error: String(err) }, { status: 500 })
+    const loginSuccessResponse = NextResponse.json({ message: 'Login successful' }, { status: 200 })
+    loginSuccessResponse.headers.set('Set-Cookie', cookie)
+    logger(req, '[LOGIN]-Success response:', loginSuccessResponse)
+    return loginSuccessResponse
+  } catch (err: any) {
+    if (err.status && err.errors) {
+      const validationErrorResponse = NextResponse.json({ message: 'Validation Error', errors: err.errors }, { status: err.status })
+      logger(req, '[LOGIN]-Validation error response:', validationErrorResponse)
+      return validationErrorResponse
+    }
+    logger(req, '[LOGIN]-Internal server error:', err)
+    const internalErrorResponse = NextResponse.json({ message: 'Internal Server Error', error: String(err) }, { status: 500 })
+    logger(req, '[LOGIN]-Error response:', internalErrorResponse)
+    return internalErrorResponse
   }
 }
