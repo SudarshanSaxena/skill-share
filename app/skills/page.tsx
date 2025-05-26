@@ -2,14 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { Skill } from '../models/interface'
 
-interface Skill {
-  id: string
-  category: string
-  experience: string
-  natureOfWork: 'online' | 'onsite'
-  hourlyRate: number
-}
+
 
 export default function SkillsPage() {
   const [skills, setSkills] = useState<Skill[]>([])

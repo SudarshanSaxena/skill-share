@@ -2,10 +2,8 @@
 
 import SkillForm from '@/app/components/SkillForm'
 import { PrismaClient } from '@/app/generated/prisma'
+import { SkillEditPageProps } from '@/app/models/interface'
 
-interface SkillEditPageProps {
-  params: { id: string }
-}
 
 const prisma = new PrismaClient()
 

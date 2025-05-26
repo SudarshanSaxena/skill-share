@@ -3,22 +3,9 @@
 import { useState, useEffect } from 'react'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { TaskFormProps } from '../models/interface'
 
-interface TaskFormProps {
-  type: 'create' | 'update'
-  taskId?: string
-  initialData?: {
-    category: string
-    name: string
-    description: string
-    expectedStartDate?: string
-    expectedWorkingHours?: number
-    hourlyRate: number
-    currency: 'USD' | 'AUD' | 'SGD' | 'INR'
-    status?: string
-  }
-  onSuccess?: () => void
-}
+
 
 export default function TaskForm({ type, taskId, initialData, onSuccess }: TaskFormProps) {
   const [formData, setFormData] = useState({

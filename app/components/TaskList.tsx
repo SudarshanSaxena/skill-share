@@ -3,28 +3,9 @@
 import { useEffect, useState } from 'react'
 import TaskForm from './TaskForm'
 import { Skill } from '../generated/prisma'
+import { Offer, Task } from '../models/interface'
 
-interface Task {
-  id: string
-  category: string
-  name: string
-  description: string
-  expectedStartDate?: string
-  expectedWorkingHours?: number
-  hourlyRate: number
-  currency: string
-  status: string
-}
 
-interface Offer {
-  id: string
-  providerId: string
-  taskId: string
-  price: number
-  message: string
-  status: 'pending' | 'accepted' | 'rejected'
-  createdAt: string
-}
 
 export default function TaskList() {
   const [loading, setLoading] = useState(false)

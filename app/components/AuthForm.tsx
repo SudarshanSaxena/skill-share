@@ -4,10 +4,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import router from 'next/router'
 import { useState } from 'react'
+import { AuthFormProps } from '../models/interface'
 
-interface AuthFormProps {
-  type: 'signup' | 'login'
-}
+
 
 export default function AuthForm({ type }: AuthFormProps) {
   const router = useRouter()

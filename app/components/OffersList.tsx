@@ -1,28 +1,10 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-
-interface Provider {
-  id: string
-  firstName?: string | null
-  lastName?: string | null
-  providerType?: 'individual' | 'company' | null
-  companyName?: string | null
-}
-
-interface Offer {
-  id: string
-  status: string
-  createdAt: string
-  provider: Provider
-}
-
-interface OffersListProps {
-  taskId: string
-}
+import { OfferList, OffersListProps } from '../models/interface'
 
 export default function OffersList({ taskId }: OffersListProps) {
-  const [offers, setOffers] = useState<Offer[]>([])
+  const [offers, setOffers] = useState<OfferList[]>([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 

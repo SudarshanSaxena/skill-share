@@ -2,17 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-
-interface SkillFormProps {
-  type: 'create' | 'update'
-  skillId?: string
-  initialData?: {
-    category: string
-    experience: string
-    natureOfWork: 'online' | 'onsite'
-    hourlyRate: number
-  }
-}
+import { SkillFormProps } from '../models/interface'
 
 export default function SkillForm({ type, skillId, initialData }: SkillFormProps) {
   const router = useRouter()
