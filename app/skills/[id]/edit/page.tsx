@@ -4,7 +4,6 @@ import SkillForm from '@/app/components/SkillForm'
 import { PrismaClient } from '@/app/generated/prisma'
 import { SkillEditPageProps } from '@/app/models/interface'
 
-
 const prisma = new PrismaClient()
 
 export default async function SkillEditPage({ params }: SkillEditPageProps) {
