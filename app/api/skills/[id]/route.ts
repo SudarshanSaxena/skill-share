@@ -80,3 +80,27 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     return errorResponse
   }
 }
+
+export async function GET(req: Request, { params }: { params: { id: string } }) {
+  logger(req, '[SKILL_GET] Incoming request', req)
+
+  const user = await getUserFromRequest(req)
+  logger(req, '[SKILL_GET] User from request:', user)
+
+  if (!user) {
+    const unauthorizedResponse = NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+    logger(req, '[SKILL_GET] Unauthorized response:', unauthorizedResponse)
+    return unauthorizedResponse
+  }
+
+  const successResponse = NextResponse.json({ message: 'Provider skills', skills: [{
+    id:'123',
+    providerId:'123',
+    category: 'Development',
+    natureOfWork:'online',
+    hourlyRate:'10 USD',
+    experience:15
+  }] })
+  return successResponse
+
+}

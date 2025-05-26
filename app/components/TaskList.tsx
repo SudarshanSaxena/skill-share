@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import TaskForm from './TaskForm'
+import { Skill } from '../generated/prisma'
 
 interface Task {
   id: string
@@ -32,6 +33,7 @@ export default function TaskList() {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [offers, setOffers] = useState<Offer[]>([])
   const [loadingOffers, setLoadingOffers] = useState(false)
+  const [providerSkills, setProviderSkills] = useState<Skill | null>(null)
 
   // New states for making an offer
   const [offerPrice, setOfferPrice] = useState('')
@@ -135,7 +137,7 @@ export default function TaskList() {
       },
     });
     if (res.ok) {
-      setLoading
+      setLoading(false)
       alert(`Offer ${action}ed!`);
       if (selectedTask?.id) {
         fetchOffers(selectedTask.id);
@@ -146,6 +148,27 @@ export default function TaskList() {
       alert(error.message || `Failed to ${action} offer`);
     }
   };
+
+  async function showSkills(providerId: string) {
+    const url = `/api/skills/${providerId}`
+    setLoading(true)
+    const res = await fetch(url,{
+      method:'GET',
+      headers:{
+        Authorizatoin: `Bearer ${localStorage.getItem('token') || ''}`,
+        'x-api-call-stack-id': crypto.randomUUID()
+      }
+    });
+    if(res.ok){
+      setLoading(false)
+      const data = await res.json()
+      setProviderSkills(data)
+    }else{
+      setLoading(false)
+      alert('Failed to fetch provider skills')
+    }
+    setLoading(false)
+  }
 
   return (
     <>
@@ -320,6 +343,15 @@ export default function TaskList() {
                         className="bg-red-600 text-white px-2 py-1 rounded"
                       >
                         Reject
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          showSkills(offer.providerId)
+                        }}
+                        className="bg-yellow-600 text-white px-2 py-1 rounded"
+                      >
+                        Show Provider Skills
                       </button>
                     </>
                     

@@ -228,8 +228,8 @@ eslint: {
 MIT License. Feel free to modify and use.
 
 
-Secure Storage on frontend
-Connection Pooling Implementation And Understanding
+Secure Storage on frontend - decrease the TTL, store in cookies and refresh token
+Connection Pooling Implementation And Understanding - pooling with neon and next js?
 Req Validation - done
 Error Handling - done
 Proper Logging of Messages - done
