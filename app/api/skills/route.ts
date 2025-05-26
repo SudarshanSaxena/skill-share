@@ -19,11 +19,11 @@ export async function GET(req: Request) {
   const user = await getUserFromRequest(req)
   logger(req, '[SKILL_GET] User from request:', user)
 
-  if (!user || user.role !== 'provider') {
-    const unauthorizedResponse = NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
-    logger(req, '[SKILL_GET] Unauthorized response:', unauthorizedResponse)
-    return unauthorizedResponse
-  }
+  // if (!user || user.role !== 'provider') {
+  //   const unauthorizedResponse = NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
+  //   logger(req, '[SKILL_GET] Unauthorized response:', unauthorizedResponse)
+  //   return unauthorizedResponse
+  // }
 
   try {
     const skills = await prisma.skill.findMany({
