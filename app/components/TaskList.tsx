@@ -30,6 +30,7 @@ export default function TaskList() {
   const [loading, setLoading] = useState(false)
   const [tasks, setTasks] = useState<Task[]>([])
   const [editingTask, setEditingTask] = useState<Task | null>(null)
+  const [editingSkill, setEditingSkill] = useState<Skill | null>(null)
   const [selectedTask, setSelectedTask] = useState<Task | null>(null)
   const [offers, setOffers] = useState<Offer[]>([])
   const [loadingOffers, setLoadingOffers] = useState(false)
@@ -185,6 +186,14 @@ export default function TaskList() {
           onClick={() => setEditingTask({} as Task)}
         >
           + New Task
+        </button>
+      )}
+      {!editingTask && !selectedTask && (
+        <button
+          className="mb-4 ml-4 bg-green-600 text-white px-4 py-2 rounded"
+          onClick={() => setEditingSkill({} as Skill)}
+        >
+          + Add skill
         </button>
       )}
 
